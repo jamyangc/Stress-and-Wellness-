@@ -10,12 +10,14 @@ const app = express();
 app.use(cors({
   origin: [
     'https://datascientists.bt',
-    'https://bds-project.onrender.com',
+    'https://stress-and-wellbeing.onrender.com',  // ✅ ADD THIS
     'http://localhost:3000'
   ],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+
 
 app.use(express.json());
 app.use(express.static("."));
