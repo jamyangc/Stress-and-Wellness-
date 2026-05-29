@@ -17,8 +17,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// REMOVED app.options('*', cors()); ← this was causing the crash
-
 app.use(express.json());
 app.use(express.static("."));
 
@@ -47,6 +45,8 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log("Server running on http://localhost:3000");
+// ✅ FIXED: Use Render's PORT env variable
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log("Server running on port " + PORT);
 });
