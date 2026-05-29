@@ -469,7 +469,7 @@ async function send(text) {
   sendBtn.innerText = "Sending...";
 
   try {
-    const res = await fetch("https://bds-project.onrender.com/chat", {
+    const res = await fetch("https://stress-and-wellbeing.onrender.com/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
