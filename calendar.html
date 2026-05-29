@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mood Calendar</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.31.0/iconfont/tabler-icons.min.css"/>
+  <style>
+    :root {
+      --cell-size: 40px;
+      --pink-light: #fce4ec;
+      --pink-mid: #f48fb1;
+      --pink-dark: #ad1457;
+      --happy: #a8d5a2;
+      --neutral: #b0c4de;
+      --stressed: #ffcc80;
+      --sad: #b39ddb;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --color-text-primary: #1a1a1a;
+      --color-text-secondary: #666666;
+      --color-background-primary: #ffffff;
+      --color-background-secondary: #f5f5f5;
+      --color-border-tertiary: #e0e0e0;
+      --color-border-secondary: #cccccc;
+      --border-radius-md: 8px;
+      --border-radius-lg: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background: #d3a9dd;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: 2rem 1rem;
+    }
+
+    /* ── BACK BUTTON ── */
+    .back-btn {
+      display: inline-flex;
+      align-items: justify;
+      gap: 6px;
+      margin: 0 0 16px 0;
+      padding: 10px 20px;
+      background: #550251;
+      color: white;
+      border-radius: 100px;
+      text-decoration: none;
+      font-size: 14px;
+      font-family: var(--font-sans);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .back-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    @media (max-width: 480px) {
+      .back-btn {
+        padding: 7px 14px;
+        font-size: 12px;
+        gap: 4px;
+      }
+    }
+
+    .wrap {
+      padding: 1.5rem;
+      max-width: 520px;
+      width: 100%;
+      margin: 0 auto;
+      color: #000000;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+    .title { font-size: 17px; font-weight: 500; color: var(--color-text-primary); margin-top: 1.2rem; }
+    .subtitle { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+
+    .month-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .month-label { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+    .nav-btn {
+      background: none;
+      border: 0.5px solid var(--color-border-tertiary);
+      border-radius: var(--border-radius-md);
+      padding: 4px 10px;
+      cursor: pointer;
+      color: var(--color-text-secondary);
+      font-size: 12px;
+    }
+    .nav-btn:hover { background: var(--color-background-secondary); }
+
+    .cal-wrap {
+      border: 0.5px solid var(--color-border-tertiary);
+      border-radius: var(--border-radius-lg);
+      padding: 12px;
+      background: #e0f5dd;
+    }
+
+    .day-labels {
+      display: grid;
+      grid-template-columns: repeat(7, var(--cell-size));
+      gap: 4px;
+      justify-content: center;
+      margin-bottom: 4px;
+    }
+    .day-label {
+      width: var(--cell-size);
+      text-align: center;
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      padding: 4px 0;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, var(--cell-size));
+      gap: 4px;
+      justify-content: center;
+    }
+
+    .day-cell {
+      width: var(--cell-size);
+      height: var(--cell-size);
+      flex-shrink: 0;
+      border-radius: 8px;
+      border: 0.5px solid var(--color-border-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.1s;
+      background: var(--color-background-primary);
+    }
+    .day-cell:hover { transform: scale(1.08); border-color: var(--color-border-secondary); }
+    .day-cell.empty { background: none; border: none; cursor: default; }
+    .day-cell.empty:hover { transform: none; }
+    .day-cell.today { border: 1.5px solid #f48fb1; color: var(--color-text-primary); font-weight: 500; }
+    .day-cell.future { opacity: 0.35; cursor: default; }
+    .day-cell.future:hover { transform: none; }
+    .day-cell.has-mood { font-weight: 500; }
+    .day-cell.happy   { background: #a8d5a2; border-color: #7cb97a; color: #2e5c2e; }
+    .day-cell.neutral { background: #b0c4de; border-color: #7fa3c6; color: #1e3a54; }
+    .day-cell.stressed{ background: #ffcc80; border-color: #ffa726; color: #5a3a00; }
+    .day-cell.sad     { background: #b39ddb; border-color: #9575cd; color: #2d1b69; }
+
+    .legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--color-text-secondary); }
+    .legend-dot { width: 11px; height: 11px; border-radius: 3px; flex-shrink: 0; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 1rem;
+    }
+    .stat-card {
+      background: rgb(156, 235, 196);
+      border-radius: var(--border-radius-md);
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .stat-num   { font-size: 20px; font-weight: 500; color: var(--color-text-primary); }
+    .stat-label { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+    .stat-month { font-size: 11px; color: var(--color-text-secondary); margin-top: 0.4rem; text-align: right; }
+
+    .tooltip {
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: red;
+      border: 0.5px solid var(--color-border-secondary);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 11px;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 10;
+      color: var(--color-text-primary);
+      display: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .day-cell:hover .tooltip { display: block; }
+
+    .bottom-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 2rem;
+      gap: 8px;
+    }
+    .demo-note {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      background: var(--color-background-secondary);
+      border-radius: var(--border-radius-md);
+      padding: 7px 10px;
+      flex: 1;
+    }
+    .clear-btn {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      background: rgb(184, 184, 221);
+      border: 0.5px solid var(--color-border-tertiary);
+      border-radius: var(--border-radius-md);
+      cursor: pointer;
+      padding: 5px 10px;
+      opacity: 0.7;
+      flex-shrink: 0;
+    }
+    .clear-btn:hover { opacity: 1; background: var(--color-background-secondary); }
+
+    .modal-bg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-box {
+      background: var(--color-background-primary);
+      border-radius: var(--border-radius-lg);
+      padding: 1.25rem;
+      width: 220px;
+      border: 0.5px solid var(--color-border-secondary);
+    }
+    .modal-date { font-size: 14px; font-weight: 500; margin-bottom: 12px; color: var(--color-text-primary); }
+    .mood-btn {
+      border: none;
+      border-radius: 8px;
+      padding: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      width: 100%;
+      margin-bottom: 8px;
+    }
+    .clear-day-btn {
+      width: 100%;
+      background: var(--color-background-secondary);
+      border: 0.5px solid var(--color-border-tertiary);
+      border-radius: 8px;
+      padding: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      margin-bottom: 8px;
+    }
+    .cancel-btn {
+      width: 100%;
+      margin-top: 2px;
+      background: none;
+      border: 0.5px solid var(--color-border-tertiary);
+      border-radius: 8px;
+      padding: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--color-text-secondary);
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: 2rem auto 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <h1 class="sr-only">Mood calendar tracker</h1>
+
+    <div class="header-row">
+      <div>
+        <p class="title">Your mood this month</p>
+        <p class="subtitle">Tap any past day to log or update your mood</p>
+      </div>
+    </div>
+
+    <div class="month-nav">
+      <button class="nav-btn" onclick="changeMonth(-1)">
+        <i class="ti ti-chevron-left" aria-hidden="true"></i> prev
+      </button>
+      <span class="month-label" id="month-label"></span>
+      <button class="nav-btn" id="next-btn" onclick="changeMonth(1)">
+        next <i class="ti ti-chevron-right" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="cal-wrap">
+      <div class="day-labels">
+        <div class="day-label">Su</div>
+        <div class="day-label">Mo</div>
+        <div class="day-label">Tu</div>
+        <div class="day-label">We</div>
+        <div class="day-label">Th</div>
+        <div class="day-label">Fr</div>
+        <div class="day-label">Sa</div>
+      </div>
+      <div class="calendar-grid" id="cal-grid"></div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#a8d5a2"></div>Happy</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#b0c4de"></div>Neutral</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ffcc80"></div>Stressed</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#b39ddb"></div>Sad</div>
+      </div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+    <p class="stat-month" id="stat-month-label"></p>
+
+    <div class="bottom-row">
+      <div class="demo-note">
+        <i class="ti ti-info-circle" aria-hidden="true" style="font-size:13px;vertical-align:-2px;margin-right:4px;"></i>
+        Moods saved in your browser — no account needed.
+      </div>
+      <button class="clear-btn" onclick="clearAll()">
+        <i class="ti ti-trash" aria-hidden="true" style="font-size:12px;vertical-align:-1px;margin-right:3px;"></i>
+        clear all
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-bg" id="modal-overlay">
+    <div class="modal-box">
+      <p class="modal-date" id="modal-date"></p>
+      <div>
+        <button class="mood-btn" style="background:#a8d5a2;color:#2e5c2e;" onclick="setMood('happy')">😊 Happy</button>
+        <button class="mood-btn" style="background:#b0c4de;color:#1e3a54;" onclick="setMood('neutral')">😐 Neutral</button>
+        <button class="mood-btn" style="background:#ffcc80;color:#5a3a00;" onclick="setMood('stressed')">😰 Stressed</button>
+        <button class="mood-btn" style="background:#b39ddb;color:#2d1b69;" onclick="setMood('sad')">😔 Sad</button>
+        <button class="clear-day-btn" id="clear-day-btn" onclick="setMood(null)">clear this day</button>
+      </div>
+      <button class="cancel-btn" onclick="closeModal()">cancel</button>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'moodCalendarData';
+    let viewYear, viewMonth, selectedKey;
+    const today = new Date();
+
+    function getStoredMoods() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
+    }
+    function saveMoods(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+    function dateKey(y, m, d) {
+      return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    }
+
+    function render() {
+      const moods = getStoredMoods();
+      const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+      const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
+      const monthName = new Date(viewYear, viewMonth, 1).toLocaleString('default', { month: 'long', year: 'numeric' });
+      document.getElementById('month-label').textContent = monthName;
+
+      const nextBtn = document.getElementById('next-btn');
+      const isCurrentMonth = viewYear === today.getFullYear() && viewMonth === today.getMonth();
+      nextBtn.style.visibility = isCurrentMonth ? 'hidden' : 'visible';
+
+      const grid = document.getElementById('cal-grid');
+      grid.innerHTML = '';
+
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        empty.className = 'day-cell empty';
+        grid.appendChild(empty);
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const key = dateKey(viewYear, viewMonth, d);
+        const mood = moods[key];
+        const cell = document.createElement('div');
+        const isToday = today.getFullYear()===viewYear && today.getMonth()===viewMonth && today.getDate()===d;
+        const isFuture = new Date(viewYear, viewMonth, d) > today;
+        cell.className = 'day-cell'
+          + (isToday  ? ' today'  : '')
+          + (isFuture ? ' future' : '')
+          + (mood     ? ' has-mood ' + mood : '');
+        cell.textContent = d;
+        if (!isFuture) {
+          cell.onclick = () => openModal(key, d);
+          if (mood) {
+            const tip = document.createElement('div');
+            tip.className = 'tooltip';
+            tip.textContent = mood.charAt(0).toUpperCase() + mood.slice(1);
+            cell.appendChild(tip);
+          }
+        }
+        grid.appendChild(cell);
+      }
+
+      renderStats(moods);
+    }
+
+    function renderStats(moods) {
+      const counts = { happy:0, neutral:0, stressed:0, sad:0 };
+      const prefix = `${viewYear}-${String(viewMonth+1).padStart(2,'0')}-`;
+      Object.entries(moods).forEach(([k, m]) => {
+        if (k.startsWith(prefix) && counts[m] !== undefined) counts[m]++;
+      });
+      const labels = { happy:'Happy', neutral:'Neutral', stressed:'Stressed', sad:'Sad' };
+      document.getElementById('stats').innerHTML = Object.entries(counts).map(([k,v]) => `
+        <div class="stat-card">
+          <div class="stat-num">${v}</div>
+          <div class="stat-label">${labels[k]}</div>
+        </div>`).join('');
+      const mn = new Date(viewYear, viewMonth, 1).toLocaleString('default', { month: 'long' });
+      document.getElementById('stat-month-label').textContent = `Stats for ${mn} only`;
+    }
+
+    function openModal(key, day) {
+      selectedKey = key;
+      const label = new Date(viewYear, viewMonth, day).toLocaleDateString('default', { month:'short', day:'numeric' });
+      document.getElementById('modal-date').textContent = `How were you on ${label}?`;
+      const moods = getStoredMoods();
+      document.getElementById('clear-day-btn').style.display = moods[key] ? 'block' : 'none';
+      document.getElementById('modal-overlay').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('modal-overlay').style.display = 'none';
+      selectedKey = null;
+    }
+
+    function setMood(mood) {
+      if (!selectedKey) return;
+      const moods = getStoredMoods();
+      if (mood === null) delete moods[selectedKey];
+      else moods[selectedKey] = mood;
+      saveMoods(moods);
+      closeModal();
+      render();
+    }
+
+    function clearAll() {
+      if (confirm('Clear all mood data? This cannot be undone.')) {
+        localStorage.removeItem(STORAGE_KEY);
+        render();
+      }
+    }
+
+    function changeMonth(dir) {
+      viewMonth += dir;
+      if (viewMonth < 0)  { viewMonth = 11; viewYear--; }
+      if (viewMonth > 11) { viewMonth = 0;  viewYear++; }
+      render();
+    }
+
+    document.getElementById('modal-overlay').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    viewYear  = today.getFullYear();
+    viewMonth = today.getMonth();
+    render();
+  </script>
+
+  <a href="index.html" class="back-btn">
+    ← Back to Wellbeing Hub
+  </a>
+</body>
+</html>
