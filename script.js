@@ -3,22 +3,6 @@
 ========================================= */
 let pageHistory = [];
 
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => {
-    p.classList.remove('active');
-  });
-
-  const page = document.querySelector(`#page-${id}`);
-  if (page) {
-    page.classList.add('active');
-  } else {
-    console.error(`Page not found: page-${id}`);
-  }
-
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-const originalShowPage = showPage;
 
 window.showPage = function(id) {
   const current = document.querySelector('.page.active');
@@ -26,8 +10,15 @@ window.showPage = function(id) {
     const currentId = current.id.replace('page-', '');
     pageHistory.push(currentId);
   }
-
-  originalShowPage(id);
+   // merged logic from the deleted function
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const page = document.querySelector(`#page-${id}`);
+  if (page) {
+    page.classList.add('active');
+  } else {
+    console.error(`Page not found: page-${id}`);
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 
   if (id === 'findings') {
     setTimeout(animateCounters, 300);
@@ -38,6 +29,8 @@ window.showPage = function(id) {
     backBtn.style.display = pageHistory.length > 0 ? 'block' : 'none';
   }
 };
+
+
 
 function goBack() {
   if (pageHistory.length === 0) return;
@@ -423,20 +416,19 @@ function csq(btn) {
 /* =========================================
    SEND
 ========================================= */
-sendBtn.onclick = () => {
+function handleSend() {
   const value = input.value.trim();
   if (!value) return;
   send(value);
   input.value = "";
-};
+}
+
+sendBtn.onclick = () => handleSend();
 
 input.addEventListener("keypress", function(e) {
   if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
-    const value = input.value.trim();
-    if (!value) return;
-    send(value);
-    input.value = "";
+    handleSend();
   }
 });
 
