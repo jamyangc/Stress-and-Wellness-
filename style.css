@@ -566,7 +566,7 @@ footer img {
   position: fixed; bottom: 22px; right: 22px;
   width: 58px; height: 58px;
   border-radius: 50%; border: none;
-  background-image: url('Pudgy_Penguins.gif');
+  background-image: url('photos/Pudgy_Penguins.gif');
   background-size: cover; background-position: center;
   cursor: pointer; z-index: 999;
   box-shadow: 0 6px 20px rgba(85,2,81,0.30);

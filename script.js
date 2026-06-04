@@ -558,22 +558,6 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-/* =========================================
-   DARK MODE TOGGLE
-========================================= */
-function toggleDark() {
-  const isDark = document.body.classList.toggle('dark');
-  document.getElementById('darkToggle').textContent = isDark ? '☀️' : '🌙';
-  localStorage.setItem('theme', isDark ? 'dark' : 'light');
-}
-
-(function () {
-  if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark');
-    const btn = document.getElementById('darkToggle');
-    if (btn) btn.textContent = '☀️';
-  }
-})();
 
 /* =========================================
    CHATBOT CSS INJECTION
