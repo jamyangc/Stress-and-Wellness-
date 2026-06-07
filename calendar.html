@@ -3,163 +3,210 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mood Calendar</title>
+  <title>Mood Calendar · InternWellbeing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.31.0/iconfont/tabler-icons.min.css"/>
   <style>
     :root {
-      --cell-size: 40px;
-      --pink-light: #fce4ec;
-      --pink-mid: #f48fb1;
-      --pink-dark: #ad1457;
-      --happy: #a8d5a2;
+      --cell: 40px;
+      --happy:   #a8d5a2;
+      --happy-dark: #2e5c2e;
+      --happy-border: #7cb97a;
       --neutral: #b0c4de;
+      --neutral-dark: #1e3a54;
+      --neutral-border: #7fa3c6;
       --stressed: #ffcc80;
+      --stressed-dark: #5a3a00;
+      --stressed-border: #ffa726;
       --sad: #b39ddb;
-      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      --color-text-primary: #1a1a1a;
-      --color-text-secondary: #666666;
-      --color-background-primary: #ffffff;
-      --color-background-secondary: #f5f5f5;
-      --color-border-tertiary: #e0e0e0;
-      --color-border-secondary: #cccccc;
-      --border-radius-md: 8px;
-      --border-radius-lg: 12px;
+      --sad-dark: #2d1b69;
+      --sad-border: #9575cd;
+      --plum: #550251;
+      --plum-light: #fce4ec;
+      --bg: #ede0f5;
+      --card: #ffffff;
+      --text: #1a1a1a;
+      --muted: #777;
+      --border: #e0e0e0;
+      --green-bg: #e2f5e0;
+      --radius: 12px;
+      --radius-sm: 8px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: var(--font-sans);
-      background: #d3a9dd;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
       min-height: 100vh;
+      padding: 1.5rem 1rem 3rem;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-start;
-      padding: 2rem 1rem;
+      align-items: center;
     }
 
     /* ── BACK BUTTON ── */
     .back-btn {
       display: inline-flex;
-      align-items: justify;
+      align-items: center;
       gap: 6px;
-      margin: 0 0 16px 0;
-      padding: 10px 20px;
-      background: #550251;
+      padding: 9px 18px;
+      background: var(--plum);
       color: white;
       border-radius: 100px;
       text-decoration: none;
-      font-size: 14px;
-      font-family: var(--font-sans);
-      transition: opacity 0.2s, transform 0.2s;
-    }
-    .back-btn:hover { opacity: 0.88; transform: translateY(-1px); }
-
-    @media (max-width: 480px) {
-      .back-btn {
-        padding: 7px 14px;
-        font-size: 12px;
-        gap: 4px;
-      }
-    }
-
-    .wrap {
-      padding: 1.5rem;
-      max-width: 520px;
-      width: 100%;
-      margin: 0 auto;
-      color: #000000;
-    }
-
-    .header-row {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      transition: opacity .2s, transform .2s;
+      align-self: flex-start;
       margin-bottom: 1.25rem;
     }
-    .title { font-size: 17px; font-weight: 500; color: var(--color-text-primary); margin-top: 1.2rem; }
-    .subtitle { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+    .back-btn:hover { opacity: .88; transform: translateY(-1px); }
 
+    /* ── WRAP ── */
+    .wrap {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      margin-bottom: 1.25rem;
+    }
+    .page-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--plum);
+    }
+    .page-header p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* ── MONTH NAV ── */
     .month-nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 10px;
     }
-    .month-label { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+    .month-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
     .nav-btn {
-      background: none;
-      border: 0.5px solid var(--color-border-tertiary);
-      border-radius: var(--border-radius-md);
-      padding: 4px 10px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 5px 12px;
       cursor: pointer;
-      color: var(--color-text-secondary);
+      color: var(--muted);
       font-size: 12px;
+      font-family: 'DM Sans', sans-serif;
+      transition: background .15s;
     }
-    .nav-btn:hover { background: var(--color-background-secondary); }
+    .nav-btn:hover { background: #f0e8f5; }
 
+    /* ── CALENDAR ── */
     .cal-wrap {
-      border: 0.5px solid var(--color-border-tertiary);
-      border-radius: var(--border-radius-lg);
-      padding: 12px;
-      background: #e0f5dd;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      background: var(--green-bg);
     }
-
     .day-labels {
       display: grid;
-      grid-template-columns: repeat(7, var(--cell-size));
+      grid-template-columns: repeat(7, var(--cell));
       gap: 4px;
       justify-content: center;
       margin-bottom: 4px;
     }
     .day-label {
-      width: var(--cell-size);
+      width: var(--cell);
       text-align: center;
       font-size: 11px;
-      color: var(--color-text-secondary);
+      color: var(--muted);
       padding: 4px 0;
+      font-weight: 500;
     }
-
     .calendar-grid {
       display: grid;
-      grid-template-columns: repeat(7, var(--cell-size));
+      grid-template-columns: repeat(7, var(--cell));
       gap: 4px;
       justify-content: center;
     }
-
     .day-cell {
-      width: var(--cell-size);
-      height: var(--cell-size);
-      flex-shrink: 0;
-      border-radius: 8px;
-      border: 0.5px solid var(--color-border-tertiary);
+      width: var(--cell);
+      height: var(--cell);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 12px;
-      color: var(--color-text-secondary);
+      color: var(--muted);
       cursor: pointer;
       position: relative;
-      transition: transform 0.1s;
-      background: var(--color-background-primary);
+      transition: transform .1s, box-shadow .1s;
+      background: var(--card);
+      flex-direction: column;
+      gap: 1px;
     }
-    .day-cell:hover { transform: scale(1.08); border-color: var(--color-border-secondary); }
-    .day-cell.empty { background: none; border: none; cursor: default; }
-    .day-cell.empty:hover { transform: none; }
-    .day-cell.today { border: 1.5px solid #f48fb1; color: var(--color-text-primary); font-weight: 500; }
-    .day-cell.future { opacity: 0.35; cursor: default; }
-    .day-cell.future:hover { transform: none; }
-    .day-cell.has-mood { font-weight: 500; }
-    .day-cell.happy   { background: #a8d5a2; border-color: #7cb97a; color: #2e5c2e; }
-    .day-cell.neutral { background: #b0c4de; border-color: #7fa3c6; color: #1e3a54; }
-    .day-cell.stressed{ background: #ffcc80; border-color: #ffa726; color: #5a3a00; }
-    .day-cell.sad     { background: #b39ddb; border-color: #9575cd; color: #2d1b69; }
+    .day-cell:hover { transform: scale(1.1); box-shadow: 0 2px 8px rgba(0,0,0,.12); border-color: #bbb; }
+    .day-cell.empty  { background: none; border: none; cursor: default; }
+    .day-cell.empty:hover { transform: none; box-shadow: none; }
+    .day-cell.today  { border: 2px solid var(--plum); color: var(--text); font-weight: 600; }
+    .day-cell.future { opacity: .35; cursor: default; pointer-events: none; }
+    .day-cell.happy    { background: var(--happy);   border-color: var(--happy-border);   color: var(--happy-dark); }
+    .day-cell.neutral  { background: var(--neutral);  border-color: var(--neutral-border);  color: var(--neutral-dark); }
+    .day-cell.stressed { background: var(--stressed); border-color: var(--stressed-border); color: var(--stressed-dark); }
+    .day-cell.sad      { background: var(--sad);      border-color: var(--sad-border);      color: var(--sad-dark); }
+    .day-cell.has-note::after {
+      content: '';
+      display: block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--plum);
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+    }
 
-    .legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
-    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--color-text-secondary); }
-    .legend-dot { width: 11px; height: 11px; border-radius: 3px; flex-shrink: 0; }
+    /* ── LEGEND ── */
+    .legend {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      align-items: center;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .legend-dot {
+      width: 10px; height: 10px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .legend-note-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--plum);
+      flex-shrink: 0;
+    }
 
+    /* ── STATS ── */
     .stats {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -167,149 +214,372 @@
       margin-top: 1rem;
     }
     .stat-card {
-      background: rgb(156, 235, 196);
-      border-radius: var(--border-radius-md);
-      padding: 10px 8px;
+      background: #d4f0d0;
+      border-radius: var(--radius-sm);
+      padding: 10px 6px;
       text-align: center;
     }
-    .stat-num   { font-size: 20px; font-weight: 500; color: var(--color-text-primary); }
-    .stat-label { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
-    .stat-month { font-size: 11px; color: var(--color-text-secondary); margin-top: 0.4rem; text-align: right; }
+    .stat-num   { font-size: 20px; font-weight: 600; color: var(--text); }
+    .stat-emoji { font-size: 14px; }
+    .stat-label { font-size: 10px; color: var(--muted); margin-top: 2px; }
+    .stat-month { font-size: 11px; color: var(--muted); margin-top: .4rem; text-align: right; }
 
-    .tooltip {
-      position: absolute;
-      bottom: calc(100% + 6px);
-      left: 50%;
-      transform: translateX(-50%);
-      background: red;
-      border: 0.5px solid var(--color-border-secondary);
-      border-radius: 6px;
-      padding: 4px 8px;
-      font-size: 11px;
-      white-space: nowrap;
-      pointer-events: none;
-      z-index: 10;
-      color: var(--color-text-primary);
-      display: none;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    /* ── JOURNAL PREVIEW STRIP ── */
+    .journal-strip {
+      margin-top: 1.25rem;
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 14px;
     }
-    .day-cell:hover .tooltip { display: block; }
+    .journal-strip h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 14px;
+      color: var(--plum);
+      margin-bottom: 10px;
+    }
+    .journal-entry-preview {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+      cursor: pointer;
+      transition: background .1s;
+      border-radius: 6px;
+      padding: 7px 8px;
+    }
+    .journal-entry-preview:hover { background: #faf5ff; }
+    .journal-entry-preview:last-child { border-bottom: none; }
+    .jep-dot {
+      width: 10px; height: 10px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+    .jep-meta { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+    .jep-text { font-size: 13px; color: var(--text); line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 360px; }
+    .journal-empty {
+      font-size: 13px;
+      color: var(--muted);
+      font-style: italic;
+      text-align: center;
+      padding: 8px 0;
+    }
 
+    /* ── BOTTOM ROW ── */
     .bottom-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 2rem;
+      margin-top: 1.25rem;
       gap: 8px;
     }
     .demo-note {
       font-size: 11px;
-      color: var(--color-text-secondary);
-      background: var(--color-background-secondary);
-      border-radius: var(--border-radius-md);
+      color: var(--muted);
+      background: #f5f5f5;
+      border-radius: var(--radius-sm);
       padding: 7px 10px;
       flex: 1;
     }
     .clear-btn {
       font-size: 11px;
-      color: var(--color-text-secondary);
-      background: rgb(184, 184, 221);
-      border: 0.5px solid var(--color-border-tertiary);
-      border-radius: var(--border-radius-md);
+      color: var(--muted);
+      background: #e0ddf0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
       cursor: pointer;
-      padding: 5px 10px;
-      opacity: 0.7;
-      flex-shrink: 0;
+      padding: 6px 12px;
+      font-family: 'DM Sans', sans-serif;
+      transition: background .15s;
     }
-    .clear-btn:hover { opacity: 1; background: var(--color-background-secondary); }
+    .clear-btn:hover { background: #d0ccee; }
 
+    /* ══════════════════════════════════════
+       MODAL — shared base
+    ══════════════════════════════════════ */
     .modal-bg {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.3);
-      z-index: 100;
+      background: rgba(0,0,0,.35);
+      z-index: 200;
       align-items: center;
       justify-content: center;
+      padding: 1rem;
     }
+    .modal-bg.open { display: flex; }
+
+    /* ── MOOD MODAL ── */
     .modal-box {
-      background: var(--color-background-primary);
-      border-radius: var(--border-radius-lg);
-      padding: 1.25rem;
-      width: 220px;
-      border: 0.5px solid var(--color-border-secondary);
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+      width: 240px;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 30px rgba(0,0,0,.15);
+      animation: popIn .18s ease;
     }
-    .modal-date { font-size: 14px; font-weight: 500; margin-bottom: 12px; color: var(--color-text-primary); }
+    @keyframes popIn {
+      from { transform: scale(.92); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    .modal-date {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      color: var(--text);
+    }
     .mood-btn {
       border: none;
-      border-radius: 8px;
-      padding: 8px;
+      border-radius: var(--radius-sm);
+      padding: 9px;
       cursor: pointer;
       font-size: 13px;
       font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
       width: 100%;
       margin-bottom: 8px;
+      transition: opacity .15s, transform .1s;
     }
+    .mood-btn:hover { opacity: .85; transform: translateY(-1px); }
+    .modal-divider {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+      margin: 4px 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .modal-divider::before, .modal-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .journal-note-btn {
+      width: 100%;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      border: 1px dashed var(--plum);
+      background: #fdf5ff;
+      color: var(--plum);
+      font-size: 12px;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      margin-bottom: 8px;
+      transition: background .15s;
+    }
+    .journal-note-btn:hover { background: #f5e8ff; }
     .clear-day-btn {
       width: 100%;
-      background: var(--color-background-secondary);
-      border: 0.5px solid var(--color-border-tertiary);
-      border-radius: 8px;
-      padding: 6px;
+      background: #f5f5f5;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 7px;
       cursor: pointer;
       font-size: 12px;
-      color: var(--color-text-secondary);
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
       margin-bottom: 8px;
     }
     .cancel-btn {
       width: 100%;
       margin-top: 2px;
       background: none;
-      border: 0.5px solid var(--color-border-tertiary);
-      border-radius: 8px;
-      padding: 6px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 7px;
       cursor: pointer;
       font-size: 12px;
-      color: var(--color-text-secondary);
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
     }
-    .back-btn {
-      display: inline-flex;
+
+    /* ── JOURNAL MODAL ── */
+    .journal-modal-box {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+      width: min(480px, 100%);
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 30px rgba(0,0,0,.15);
+      animation: popIn .18s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .journal-modal-header {
+      display: flex;
       align-items: center;
+      justify-content: space-between;
+    }
+    .journal-modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--plum);
+    }
+    .journal-modal-date {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .jm-close {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 28px; height: 28px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--muted);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .journal-prompt {
+      font-size: 12px;
+      color: var(--muted);
+      font-style: italic;
+      padding: 8px 12px;
+      background: #fdf5ff;
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--plum);
+      line-height: 1.5;
+    }
+    .journal-textarea {
+      width: 100%;
+      min-height: 130px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--text);
+      resize: vertical;
+      outline: none;
+      line-height: 1.6;
+      transition: border-color .2s;
+    }
+    .journal-textarea:focus { border-color: var(--plum); }
+    .journal-char-count {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: right;
+      margin-top: -6px;
+    }
+    .journal-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .jm-save-btn {
+      padding: 8px 20px;
+      background: var(--plum);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: opacity .15s;
+    }
+    .jm-save-btn:hover { opacity: .85; }
+    .jm-delete-btn {
+      padding: 8px 14px;
+      background: none;
+      color: #c0392b;
+      border: 1px solid #f0b0a8;
+      border-radius: 100px;
+      font-size: 12px;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: background .15s;
+      display: none;
+    }
+    .jm-delete-btn:hover { background: #fff0ee; }
+    .jm-cancel-btn {
+      padding: 8px 14px;
+      background: none;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 12px;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+    }
+
+    /* prompts */
+    .prompt-chips {
+      display: flex;
+      flex-wrap: wrap;
       gap: 6px;
-      margin: 2rem auto 0 auto;
+    }
+    .prompt-chip {
+      font-size: 11px;
+      color: var(--plum);
+      background: #f5e8ff;
+      border: 1px solid #ddbcf5;
+      border-radius: 100px;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .prompt-chip:hover { background: #ecdcff; }
+
+    /* ── TOOLTIP ── */
+    .tooltip {
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: white;
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 11px;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 10;
+      display: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,.2);
+    }
+    .day-cell:hover .tooltip { display: block; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 420px) {
+      :root { --cell: 36px; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .jep-text { max-width: 220px; }
     }
   </style>
 </head>
 <body>
 
   <div class="wrap">
-    <h1 class="sr-only">Mood calendar tracker</h1>
+    <a href="index.html" class="back-btn">← Back to Wellbeing Hub</a>
 
-    <div class="header-row">
-      <div>
-        <p class="title">Your mood this month</p>
-        <p class="subtitle">Tap any past day to log or update your mood</p>
-      </div>
+    <div class="page-header">
+      <h1>Mood Calendar 📅</h1>
+      <p>Tap any past day to log your mood &amp; write a note</p>
     </div>
 
+    <!-- Month nav -->
     <div class="month-nav">
       <button class="nav-btn" onclick="changeMonth(-1)">
-        <i class="ti ti-chevron-left" aria-hidden="true"></i> prev
+        <i class="ti ti-chevron-left"></i> prev
       </button>
       <span class="month-label" id="month-label"></span>
       <button class="nav-btn" id="next-btn" onclick="changeMonth(1)">
-        next <i class="ti ti-chevron-right" aria-hidden="true"></i>
+        next <i class="ti ti-chevron-right"></i>
       </button>
     </div>
 
+    <!-- Calendar -->
     <div class="cal-wrap">
       <div class="day-labels">
-        <div class="day-label">Su</div>
-        <div class="day-label">Mo</div>
-        <div class="day-label">Tu</div>
-        <div class="day-label">We</div>
-        <div class="day-label">Th</div>
-        <div class="day-label">Fr</div>
+        <div class="day-label">Su</div><div class="day-label">Mo</div>
+        <div class="day-label">Tu</div><div class="day-label">We</div>
+        <div class="day-label">Th</div><div class="day-label">Fr</div>
         <div class="day-label">Sa</div>
       </div>
       <div class="calendar-grid" id="cal-grid"></div>
@@ -318,54 +588,118 @@
         <div class="legend-item"><div class="legend-dot" style="background:#b0c4de"></div>Neutral</div>
         <div class="legend-item"><div class="legend-dot" style="background:#ffcc80"></div>Stressed</div>
         <div class="legend-item"><div class="legend-dot" style="background:#b39ddb"></div>Sad</div>
+        <div class="legend-item"><div class="legend-note-dot"></div>Has note</div>
       </div>
     </div>
 
+    <!-- Stats -->
     <div class="stats" id="stats"></div>
     <p class="stat-month" id="stat-month-label"></p>
 
+    <!-- Journal preview strip -->
+    <div class="journal-strip">
+      <h3>📖 Recent Journal Entries</h3>
+      <div id="journal-preview"></div>
+    </div>
+
+    <!-- Bottom row -->
     <div class="bottom-row">
       <div class="demo-note">
-        <i class="ti ti-info-circle" aria-hidden="true" style="font-size:13px;vertical-align:-2px;margin-right:4px;"></i>
-        Moods saved in your browser — no account needed.
+        <i class="ti ti-lock" style="font-size:12px;vertical-align:-2px;margin-right:4px;"></i>
+        Moods &amp; notes saved in your browser — private &amp; no account needed.
       </div>
       <button class="clear-btn" onclick="clearAll()">
-        <i class="ti ti-trash" aria-hidden="true" style="font-size:12px;vertical-align:-1px;margin-right:3px;"></i>
+        <i class="ti ti-trash" style="font-size:12px;vertical-align:-1px;margin-right:3px;"></i>
         clear all
       </button>
     </div>
   </div>
 
-  <!-- Modal -->
-  <div class="modal-bg" id="modal-overlay">
+  <!-- ══ MOOD MODAL ══ -->
+  <div class="modal-bg" id="mood-modal">
     <div class="modal-box">
       <p class="modal-date" id="modal-date"></p>
-      <div>
-        <button class="mood-btn" style="background:#a8d5a2;color:#2e5c2e;" onclick="setMood('happy')">😊 Happy</button>
-        <button class="mood-btn" style="background:#b0c4de;color:#1e3a54;" onclick="setMood('neutral')">😐 Neutral</button>
-        <button class="mood-btn" style="background:#ffcc80;color:#5a3a00;" onclick="setMood('stressed')">😰 Stressed</button>
-        <button class="mood-btn" style="background:#b39ddb;color:#2d1b69;" onclick="setMood('sad')">😔 Sad</button>
-        <button class="clear-day-btn" id="clear-day-btn" onclick="setMood(null)">clear this day</button>
+      <button class="mood-btn" style="background:#a8d5a2;color:#2e5c2e;" onclick="setMood('happy')">😊 Happy</button>
+      <button class="mood-btn" style="background:#b0c4de;color:#1e3a54;" onclick="setMood('neutral')">😐 Neutral</button>
+      <button class="mood-btn" style="background:#ffcc80;color:#5a3a00;" onclick="setMood('stressed')">😰 Stressed</button>
+      <button class="mood-btn" style="background:#b39ddb;color:#2d1b69;" onclick="setMood('sad')">😔 Sad</button>
+      <div class="modal-divider">also</div>
+      <button class="journal-note-btn" onclick="openJournalFromMood()">✏️ Write a journal note</button>
+      <button class="clear-day-btn" id="clear-day-btn" onclick="setMood(null)">clear this day</button>
+      <button class="cancel-btn" onclick="closeMoodModal()">cancel</button>
+    </div>
+  </div>
+
+  <!-- ══ JOURNAL MODAL ══ -->
+  <div class="modal-bg" id="journal-modal">
+    <div class="journal-modal-box">
+      <div class="journal-modal-header">
+        <div>
+          <div class="journal-modal-title">Journal Entry ✍️</div>
+          <div class="journal-modal-date" id="jm-date"></div>
+        </div>
+        <button class="jm-close" onclick="closeJournalModal()">✕</button>
       </div>
-      <button class="cancel-btn" onclick="closeModal()">cancel</button>
+
+      <div class="journal-prompt" id="jm-prompt"></div>
+
+      <div class="prompt-chips" id="jm-prompt-chips"></div>
+
+      <textarea class="journal-textarea" id="jm-textarea"
+        placeholder="Write freely… this is just for you."
+        maxlength="1000"
+        oninput="updateCharCount()"></textarea>
+      <div class="journal-char-count"><span id="jm-char">0</span> / 1000</div>
+
+      <div class="journal-actions">
+        <button class="jm-delete-btn" id="jm-delete-btn" onclick="deleteNote()">🗑 Delete note</button>
+        <button class="jm-cancel-btn" onclick="closeJournalModal()">Cancel</button>
+        <button class="jm-save-btn" onclick="saveNote()">Save note</button>
+      </div>
     </div>
   </div>
 
   <script>
-    const STORAGE_KEY = 'moodCalendarData';
+    const MOOD_KEY  = 'moodCalendarData';
+    const NOTE_KEY  = 'moodCalendarNotes';
+
     let viewYear, viewMonth, selectedKey;
     const today = new Date();
 
-    function getStoredMoods() {
-      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
-    }
-    function saveMoods(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
-    function dateKey(y, m, d) {
-      return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    }
+    const MOOD_COLORS = {
+      happy:    { bg:'#a8d5a2', text:'#2e5c2e' },
+      neutral:  { bg:'#b0c4de', text:'#1e3a54' },
+      stressed: { bg:'#ffcc80', text:'#5a3a00' },
+      sad:      { bg:'#b39ddb', text:'#2d1b69' },
+    };
 
+    const PROMPTS = {
+      happy:    ["What made you smile today?", "What went really well?", "Who made your day brighter?"],
+      neutral:  ["How are you really feeling?", "What's on your mind today?", "What would make tomorrow better?"],
+      stressed: ["What's weighing on you most?", "What's one small thing you can let go of?", "Who could you reach out to?"],
+      sad:      ["It's okay to feel sad. What's hurting?", "What do you need right now?", "What's one kind thing you can do for yourself?"],
+      default:  ["How was your day?", "What do you want to remember about today?", "One word to describe today?"],
+    };
+
+    const CHIPS = {
+      happy:    ["I'm grateful for…", "I accomplished…", "I felt joy when…"],
+      neutral:  ["I'm thinking about…", "I noticed…", "I need…"],
+      stressed: ["The hardest part was…", "I coped by…", "Tomorrow I'll…"],
+      sad:      ["I felt sad because…", "I needed…", "I'm kind to myself by…"],
+      default:  ["Today I…", "I felt…", "I'm grateful for…"],
+    };
+
+    /* ── Storage helpers ── */
+    function getMoods() { try { return JSON.parse(localStorage.getItem(MOOD_KEY) || '{}'); } catch { return {}; } }
+    function saveMoods(d) { localStorage.setItem(MOOD_KEY, JSON.stringify(d)); }
+    function getNotes() { try { return JSON.parse(localStorage.getItem(NOTE_KEY) || '{}'); } catch { return {}; } }
+    function saveNotes(d) { localStorage.setItem(NOTE_KEY, JSON.stringify(d)); }
+    function dateKey(y, m, d) { return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
+
+    /* ── Render calendar ── */
     function render() {
-      const moods = getStoredMoods();
+      const moods = getMoods();
+      const notes = getNotes();
       const firstDay = new Date(viewYear, viewMonth, 1).getDay();
       const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
       const monthName = new Date(viewYear, viewMonth, 1).toLocaleString('default', { month: 'long', year: 'numeric' });
@@ -379,28 +713,33 @@
       grid.innerHTML = '';
 
       for (let i = 0; i < firstDay; i++) {
-        const empty = document.createElement('div');
-        empty.className = 'day-cell empty';
-        grid.appendChild(empty);
+        const e = document.createElement('div');
+        e.className = 'day-cell empty';
+        grid.appendChild(e);
       }
 
       for (let d = 1; d <= daysInMonth; d++) {
-        const key = dateKey(viewYear, viewMonth, d);
+        const key  = dateKey(viewYear, viewMonth, d);
         const mood = moods[key];
-        const cell = document.createElement('div');
-        const isToday = today.getFullYear()===viewYear && today.getMonth()===viewMonth && today.getDate()===d;
+        const note = notes[key];
+        const isToday  = today.getFullYear()===viewYear && today.getMonth()===viewMonth && today.getDate()===d;
         const isFuture = new Date(viewYear, viewMonth, d) > today;
+
+        const cell = document.createElement('div');
         cell.className = 'day-cell'
-          + (isToday  ? ' today'  : '')
-          + (isFuture ? ' future' : '')
-          + (mood     ? ' has-mood ' + mood : '');
+          + (isToday  ? ' today'   : '')
+          + (isFuture ? ' future'  : '')
+          + (mood     ? ' has-mood ' + mood : '')
+          + (note     ? ' has-note' : '');
         cell.textContent = d;
+
         if (!isFuture) {
-          cell.onclick = () => openModal(key, d);
-          if (mood) {
+          cell.onclick = () => openMoodModal(key, d);
+          if (mood || note) {
             const tip = document.createElement('div');
             tip.className = 'tooltip';
-            tip.textContent = mood.charAt(0).toUpperCase() + mood.slice(1);
+            const moodLabel = mood ? (mood.charAt(0).toUpperCase() + mood.slice(1)) : '';
+            tip.textContent = moodLabel + (note ? (moodLabel ? ' · 📝' : '📝 Note') : '');
             cell.appendChild(tip);
           }
         }
@@ -408,17 +747,19 @@
       }
 
       renderStats(moods);
+      renderJournalPreview(moods, notes);
     }
 
+    /* ── Stats ── */
     function renderStats(moods) {
       const counts = { happy:0, neutral:0, stressed:0, sad:0 };
       const prefix = `${viewYear}-${String(viewMonth+1).padStart(2,'0')}-`;
-      Object.entries(moods).forEach(([k, m]) => {
-        if (k.startsWith(prefix) && counts[m] !== undefined) counts[m]++;
-      });
+      Object.entries(moods).forEach(([k, m]) => { if (k.startsWith(prefix) && counts[m]!==undefined) counts[m]++; });
+      const emojis = { happy:'😊', neutral:'😐', stressed:'😰', sad:'😔' };
       const labels = { happy:'Happy', neutral:'Neutral', stressed:'Stressed', sad:'Sad' };
       document.getElementById('stats').innerHTML = Object.entries(counts).map(([k,v]) => `
         <div class="stat-card">
+          <div class="stat-emoji">${emojis[k]}</div>
           <div class="stat-num">${v}</div>
           <div class="stat-label">${labels[k]}</div>
         </div>`).join('');
@@ -426,33 +767,155 @@
       document.getElementById('stat-month-label').textContent = `Stats for ${mn} only`;
     }
 
-    function openModal(key, day) {
+    /* ── Journal preview strip ── */
+    function renderJournalPreview(moods, notes) {
+      const container = document.getElementById('journal-preview');
+      // gather all note entries, sort descending
+      const entries = Object.entries(notes)
+        .filter(([, v]) => v && v.trim())
+        .sort(([a], [b]) => b.localeCompare(a))
+        .slice(0, 5);
+
+      if (!entries.length) {
+        container.innerHTML = '<p class="journal-empty">No journal entries yet. Tap a day to start writing! ✨</p>';
+        return;
+      }
+
+      container.innerHTML = entries.map(([key, text]) => {
+        const mood = moods[key];
+        const color = mood ? MOOD_COLORS[mood].bg : '#e0e0e0';
+        const date = new Date(key + 'T00:00:00').toLocaleDateString('default', { month:'short', day:'numeric', year:'numeric' });
+        const preview = text.length > 80 ? text.slice(0, 80) + '…' : text;
+        return `<div class="journal-entry-preview" onclick="openJournalDirect('${key}')">
+          <div class="jep-dot" style="background:${color}"></div>
+          <div style="min-width:0">
+            <div class="jep-meta">${date}${mood ? ' · ' + mood : ''}</div>
+            <div class="jep-text">${escHtml(preview)}</div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    /* ── Mood modal ── */
+    function openMoodModal(key, day) {
       selectedKey = key;
       const label = new Date(viewYear, viewMonth, day).toLocaleDateString('default', { month:'short', day:'numeric' });
       document.getElementById('modal-date').textContent = `How were you on ${label}?`;
-      const moods = getStoredMoods();
+      const moods = getMoods();
       document.getElementById('clear-day-btn').style.display = moods[key] ? 'block' : 'none';
-      document.getElementById('modal-overlay').style.display = 'flex';
+      document.getElementById('mood-modal').classList.add('open');
     }
 
-    function closeModal() {
-      document.getElementById('modal-overlay').style.display = 'none';
-      selectedKey = null;
+    function closeMoodModal() {
+      document.getElementById('mood-modal').classList.remove('open');
     }
 
     function setMood(mood) {
       if (!selectedKey) return;
-      const moods = getStoredMoods();
+      const moods = getMoods();
       if (mood === null) delete moods[selectedKey];
       else moods[selectedKey] = mood;
       saveMoods(moods);
-      closeModal();
+      closeMoodModal();
       render();
     }
 
+    /* ── Journal modal ── */
+    function openJournalModal(key) {
+      selectedKey = key;
+      const notes = getNotes();
+      const moods = getMoods();
+      const mood = moods[key];
+      const existing = notes[key] || '';
+
+      // date label — parse as local date
+      const parts = key.split('-');
+      const d = new Date(+parts[0], +parts[1]-1, +parts[2]);
+      document.getElementById('jm-date').textContent =
+        d.toLocaleDateString('default', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+
+      // prompt
+      const prompts = PROMPTS[mood] || PROMPTS.default;
+      document.getElementById('jm-prompt').textContent = prompts[Math.floor(Math.random() * prompts.length)];
+
+      // chips
+      const chips = CHIPS[mood] || CHIPS.default;
+      document.getElementById('jm-prompt-chips').innerHTML = chips.map(c =>
+        `<button class="prompt-chip" onclick="appendChip('${escHtml(c)}')">${escHtml(c)}</button>`
+      ).join('');
+
+      // textarea
+      const ta = document.getElementById('jm-textarea');
+      ta.value = existing;
+      updateCharCount();
+
+      // delete button
+      document.getElementById('jm-delete-btn').style.display = existing ? 'block' : 'none';
+
+      document.getElementById('journal-modal').classList.add('open');
+      setTimeout(() => ta.focus(), 100);
+    }
+
+    function closeJournalModal() {
+      document.getElementById('journal-modal').classList.remove('open');
+    }
+
+    function openJournalFromMood() {
+      closeMoodModal();
+      openJournalModal(selectedKey);
+    }
+
+    function openJournalDirect(key) {
+      // figure out year/month from key so selectedKey is right
+      const parts = key.split('-');
+      // we can open from any month — just set selectedKey
+      selectedKey = key;
+      openJournalModal(key);
+    }
+
+    function appendChip(text) {
+      const ta = document.getElementById('jm-textarea');
+      const cur = ta.value;
+      ta.value = cur + (cur && !cur.endsWith(' ') ? ' ' : '') + text;
+      updateCharCount();
+      ta.focus();
+    }
+
+    function updateCharCount() {
+      const len = document.getElementById('jm-textarea').value.length;
+      document.getElementById('jm-char').textContent = len;
+    }
+
+    function saveNote() {
+      if (!selectedKey) return;
+      const notes = getNotes();
+      const text = document.getElementById('jm-textarea').value.trim();
+      if (text) notes[selectedKey] = text;
+      else delete notes[selectedKey];
+      saveNotes(notes);
+      closeJournalModal();
+      render();
+    }
+
+    function deleteNote() {
+      if (!selectedKey) return;
+      if (!confirm('Delete this journal note?')) return;
+      const notes = getNotes();
+      delete notes[selectedKey];
+      saveNotes(notes);
+      closeJournalModal();
+      render();
+    }
+
+    /* ── Utilities ── */
     function clearAll() {
-      if (confirm('Clear all mood data? This cannot be undone.')) {
-        localStorage.removeItem(STORAGE_KEY);
+      if (confirm('Clear ALL mood data and journal notes? This cannot be undone.')) {
+        localStorage.removeItem(MOOD_KEY);
+        localStorage.removeItem(NOTE_KEY);
         render();
       }
     }
@@ -464,17 +927,18 @@
       render();
     }
 
-    document.getElementById('modal-overlay').addEventListener('click', function(e) {
-      if (e.target === this) closeModal();
+    /* Close modals on backdrop click */
+    document.getElementById('mood-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeMoodModal();
+    });
+    document.getElementById('journal-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeJournalModal();
     });
 
+    /* Init */
     viewYear  = today.getFullYear();
     viewMonth = today.getMonth();
     render();
   </script>
-
-  <a href="index.html" class="back-btn">
-    ← Back to Wellbeing Hub
-  </a>
 </body>
 </html>
